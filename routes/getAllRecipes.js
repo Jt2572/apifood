@@ -17,7 +17,7 @@ const rec = [
         name: "Pan",
         diet:['vegetarian'],
         score:7,
-        image:'https://upload.wikimedia.org/wikipedia/commons/4/45/A_small_cup_of_coffee.JPG',
+        image:'https://lilluna.com/wp-content/uploads/2018/12/homemade-bread-resize-6-500x375.jpg',
         summary: "delicioso, economico y facil de preparar",
         steps:"comprar todos los ingredientes, mezclarlos, amasar muy bien, hornearlos, esperar a que reposen y listo.s "
     },
