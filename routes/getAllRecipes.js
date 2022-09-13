@@ -2,8 +2,7 @@ const { Router, query } = require('express');
 // const { data } = require('../utils/utils')
 const router = Router();
 
-const rec = [
-    {
+const rec = [ {
         id:1,
         name: "Cafe",
         diet:['vegetarian'],
