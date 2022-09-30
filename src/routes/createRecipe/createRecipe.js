@@ -4,27 +4,65 @@ const router = Router();
 
 router.post("/",  async (req, res) => {
     
-    const { name, summary, score, instructions, diets, image } = req.body;            
-    
-    try { 
-       
-        let recipeCreated = await Recipe.create({name, image: image ||
-              "https://images.pexels.com/photos/616401/pexels-photo-616401.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-               summary, score, instructions         
+    try {
+        const {
+          name,
+          image,
+          summary,
+          score,
+          healthScore,
+          instructions,
+          dietTypes,
+          createdByUser,
+        } = req.body;
+        const newRecipe = await Recipe.create({
+          name,
+          image:
+            image ||
+            "https://p4.wallpaperbetter.com/wallpaper/314/740/853/vegetables-fork-spoon-plate-wallpaper-preview.jpg",
+          summary,
+          score,
+          healthScore,
+          instructions,
+          createdByUser,
         });
-
         const diet = await Diets.findAll({
-        where: { name: diets },
+          where: { name: dietTypes[0] },
         });
-      
-        recipeCreated.addDiet(diet);            
-        return res.json(recipeCreated);     
+        
+        console.log('dietTypes', dietTypes[0])
+        console.log('diet', diet[0].id)
+        newRecipe.addDiet( diet[0].id);
+        
+        let resp = await Recipe.findAll({
+            where: { name: "pan dulce" },
+            include: {
+                model: Diets,
+                attributes: ["name"],
+                through: {
+                    attributes: [],
+                },
+            },
+        })
+        res
+        // return res.status(200).send("Recipe created succesfully!");
+        // console.log('resp ', resp.diets)
+        for (let i=0; i<resp.length; i++) {
+            // console.log("resp[i].diets[0].name ", resp[i].diets[0]&&  resp[10].dietTypes=resp[i].diets[0].name)    
+            resp[i].diets[0]&&  (resp[i].dietTypes = resp[i].diets[0].name)
+        }
 
+        //  resp.map( (r,i)=> r.diets.length?  r.dietTypes=(r.diets.map(d=>d.name ) ) :console.log(r.name))
+        // resp[10].dietTypes = resp[10].diets[0].name
+        // console.log("resp[1].dietTypes ", resp[1].dietTypes)
+        // console.log("resp[1].diets", resp[1].diets[0])
+        
+        res.send(resp[12]);
+        return
+        
+    } catch (error) {
+        console.log(error);
     }
-    catch(e){
-        console.log(e.message)
-    }
-
-})
+});
 
 module.exports = router;

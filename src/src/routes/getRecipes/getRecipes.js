@@ -12,7 +12,9 @@ module.exports.getRecipes = async (req, res) => {
   var recsCreated = []
   var resp = []
   var msg = ''
-  console.log(req.query)
+
+  console.log(toId(['vegan']))
+
   try {
     let recs = await Recipe.findAll()
     if (recs.length === 0) {
@@ -25,27 +27,47 @@ module.exports.getRecipes = async (req, res) => {
           summary: r.summary,
           score: r.healthScore,
           instructions: r.analyzedInstructions.steps,
-          dietTypes: r.diets
+          diets: r.diets
         });
-        console.log('r.diets ',r.diets)      
-      })
+        // console.log('r.diets ',r.diets)      
+      }
+      )
       await Promise.all(recs)
+
+
     } else {
       msg = 'recipes in DB'
       console.log(cont)
+      food.results.map(async r => {
+
+
+        resp = await Recipe.findOne({
+          where: { name: r.title }
+        })
+        let diets = r.diets
+        // console.log(toId(diets))
+
+        resp.addDiets(toId(diets))
+        return
+        // console.log('diets ',diets)
+        // console.log(r.title,' ',r.diets);
+
+      }
+      )
       resp = await Recipe.findAll({
-     
+        include: {
+          model: Diets,
+          attributes: ["name"],
+          through: {
+            attributes: [],
+          },
+        },
       })
-      if (!name) {
-        recsCreated=resp        
-      } else  {
-        recsCreated = resp.filter( (n) => n.name.toLowerCase().includes( name.toLowerCase() ) );        
-        if (!recsCreated.length)          
-          return res.json({message:'there`s no recipe'})        
-      } 
     }
+
   } catch (error) {
     console.log(error.message)
   }
-  res.json(recsCreated)
+
+  res.json(resp)
 }

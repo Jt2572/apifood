@@ -31,9 +31,9 @@ module.exports = (sequelize) => {
       type: DataTypes.TEXT,
     },
     
-    dietTypes: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-    },
+    // diets: {
+    //   type: DataTypes.ENUM["primal", "fodmap friendly", "whole 30"],
+    // },
     
     image: {
       type: DataTypes.STRING,
