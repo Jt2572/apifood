@@ -42,7 +42,7 @@ module.exports.getRecipes = async (req, res) => {
     console.log(error.message)
   }  
   
-  resp = await Recipe.findAll()
+  resp = await Recipe.findAll({include:Diets})
   if (!name) {
     recsCreated = resp
     // console.log(recsCreated)
