@@ -4,7 +4,7 @@ const { types } = require("../../utils/dietTypes");
 const router = Router();
 
 router.post("/", async (req, res) => {
-  console.log(req.body)
+  // console.log(req.body)
   try {
     const {
       name,
