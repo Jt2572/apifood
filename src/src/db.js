@@ -7,7 +7,7 @@ const modelRecipe = require('./models/Recipe.js')
 const modelDiets = require('./models/Diets.js');
 
 const {
-  DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, API_KEY,
+  DB_USER, DB_PASSWORD, DB_HOST, DB_NAME,
 } = process.env;
 
 let sequelize =
