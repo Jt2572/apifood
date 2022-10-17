@@ -33,24 +33,95 @@ module.exports.getRecipes = async (req, res) => {
           instructions: r.analyzedInstructions.steps,
           dietTypes: r.diets
         });
+
+        
         // console.log('r.diets ', r.diets)
       })
       await Promise.all(recs)      
-      console.log('recipes created')
-    }
-  } catch (error) {
-    console.log(error.message)
-  }  
-  
-  resp = await Recipe.findAll({include:Diets})
-  if (!name) {
-    recsCreated = resp
-    // console.log(recsCreated)
-  } else {
-    recsCreated = resp.filter((n) => n.name.toLowerCase().includes(name.toLowerCase()));
-    if (!recsCreated.length)
-      return res.json({ message: 'there`s no recipe' })
-  }
+      
+      // let dt=[]
+      // for (let i=0; i<dietTypes.length ; i++) {
+        //   dt.push( await Diets.findOne({where:{name:dietTypes[i]}}) )
+        // }
+        
+        
+        console.log('recipes created')
+        let allRecs = await Recipe.findAll()
+        
 
-  res.json(recsCreated)
+    console.log(allRecs.length)
+    
+    allRecs.map(async r=> { 
+                          //  console.log ( await Recipe.findOne({where: {name: r.name }}) )  
+                           let newRec = await Recipe.findOne({where: {name: r.name }})
+
+                                    newRec.dietTypes.map(async d=> {
+                                    // console.log(d)
+                                    let newD = await Diets.findOne({where: {name:d}}) 
+                                     await newRec.addDiet(newD)
+                                    // console.log(newD.id)     
+                                  }
+                                    )      
+
+
+                           }) 
+        
+        
+        // dt.map( async d=> await newRecipe.addDiet(d.id))
+        
+      }
+    } catch (error) {
+      console.log(error.message)
+    }  
+
+    let allRecs = await Recipe.findAll()
+        
+
+    console.log(allRecs.length)
+    
+    allRecs.map(async r=> { 
+                          //  console.log ( await Recipe.findOne({where: {name: r.name }}) )  
+                           let newRec = await Recipe.findOne({where: {name: r.name }})
+
+                                    newRec.dietTypes.map(async d=> {
+                                    // console.log(d)
+                                    let newD = await Diets.findOne({where: {name:d}}) 
+                                     await newRec.addDiet(newD)
+                                    // console.log(newD.id)     
+                                  }
+                                    )      
+
+
+                           }) 
+                           
+
+    // console.log(newRec.dietTypes)
+    // newRec.dietTypes.map(async d=> {
+    //   console.log(d)
+    //   let newD = await Diets.findOne({where: {name:d}}) 
+    //   await newRec.addDiet(newD)
+    //   console.log(newD.id)     
+    // }
+    //   )
+
+    // console.log(dr)
+    // await newRec.addDiet(d.id)
+    
+
+    
+    
+    
+    
+    if (!name) {
+      recsCreated =  await Recipe.findAll({include:Diets})
+      // console.log(recsCreated)
+    } else {
+      recsCreated =  await Recipe.findAll({include:Diets})
+      recsCreated.filter((n) => n.name.toLowerCase().includes(name.toLowerCase()));
+      if (!recsCreated.length)
+      res.json({ message: 'there`s no recipe' })
+    }
+    resp = await Recipe.findAll({include:Diets})
+    
+  return res.json(resp)
 }
