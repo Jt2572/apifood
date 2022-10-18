@@ -7,37 +7,27 @@ const modelRecipe = require('./models/Recipe.js')
 const modelDiets = require('./models/Diets.js');
 
 const {
-  DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, API_KEY,
+  DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DATABASE_URL, LDB_URL, API_KEY,
 } = process.env;
 
-let sequelize =
-  process.env.NODE_ENV === "production"
-    ? new Sequelize({
-        database: DB_NAME,
-        dialect: "postgres",
-        host: DB_HOST,
-        port: 5432,
-        username: DB_USER,
-        password: DB_PASSWORD,
-        pool: {
-          max: 3,
-          min: 1,
-          idle: 10000,
-        },
-        dialectOptions: {
-          ssl: {
-            require: true,
-            // Ref.: https://github.com/brianc/node-postgres/issues/2009
-            rejectUnauthorized: false,
-          },
-          keepAlive: true,
-        },
-        ssl: true,
-      })
-    : new Sequelize(
-        `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`,
-        { logging: false, native: false }
-      );
+
+
+const sequelize = new Sequelize(
+  DATABASE_URL
+    ? `${DATABASE_URL}`
+    : `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`,
+  {
+    logging: false, // set to console.log to see the raw SQL queries
+    native: false, // lets Sequelize know we can use pg-native for ~30% more speed
+    ssl: process.env.PORT ? true : false,
+    dialectOptions: process.env.PORT
+      ? {
+          ssl: { require: true, rejectUnauthorized: false },
+        }
+      : {},
+  }
+)
+
 
 // const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/food`, {
 //   logging: false, // set to console.log to see the raw SQL queries
