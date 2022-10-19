@@ -17,12 +17,12 @@ module.exports.getRecipes = async (req, res) => {
 
     if (recs.length === 0) {
 
-      let diets = types.map(async (d) => {
-        await Diets.findOrCreate({
-          where: { name: d },
-        });
-      });
-      await Promise.all(diets)
+      // let diets = types.map(async (d) => {
+      //   await Diets.findOrCreate({
+      //     where: { name: d },
+      //   });
+      // });
+      // await Promise.all(diets)
 
       recs = food.results.map(r => {
         Recipe.create({
