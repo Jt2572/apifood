@@ -13,29 +13,7 @@ module.exports.getRecipes = async (req, res) => {
   var resp = []
   
   try {
-      // console.log(food.results[0])
-      // resp=food.results[0].diets
-      let diet=await Diets.findAll()
-      
-      if (!diet.length) {
-        console.log('no diets')
-        
-        let diets = types.map(async (d) => {
-          await Diets.findOrCreate({
-            where: { name: d },
-          });
-        });
-        await Promise.all(diets)        
-        resp=await Diets.findAll()
-
-
-      } else {
-        let dietDb = await Diets.findOne({where:{name:'primal'}})
-        resp=dietDb
-        console.log(dietDb)
-        
-      }
-
+      resp = await Diets.findAll()
 
 
     } catch (error) {
