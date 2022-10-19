@@ -39,11 +39,7 @@ module.exports.getRecipes = async (req, res) => {
       })
       await Promise.all(recs)      
       
-      // let dt=[]
-      // for (let i=0; i<dietTypes.length ; i++) {
-        //   dt.push( await Diets.findOne({where:{name:dietTypes[i]}}) )
-        // }
-        
+   
         
         console.log('recipes created')
         let allRecs = await Recipe.findAll()
