@@ -5,21 +5,25 @@ const food = require('./food.json');
 const { toId } = require('../../utils/toId.js')
 const { Recipe, Diets } = require("../../db");
 const { Op } = require("sequelize");
+const { types } = require('../../utils/dietTypes.js')
 
 module.exports.getRecipes = async (req, res) => {
-  const { name } = req.query;
-  var cont = 0;
+  const { name } = req.query;  
   var recsCreated = []
   var resp = []
-  var msg = ''
-
-  console.log(toId(['vegan']))
-
+  
   try {
-    let recs = await Recipe.findAll()
+    let recs = await Recipe.findAll()   
+
     if (recs.length === 0) {
-      cont++
-      msg = 'recipes created'
+
+      // let diets = types.map(async (d) => {
+      //   await Diets.findOrCreate({
+      //     where: { name: d },
+      //   });
+      // });
+      // await Promise.all(diets)
+
       recs = food.results.map(r => {
         Recipe.create({
           name: r.title,
@@ -27,47 +31,97 @@ module.exports.getRecipes = async (req, res) => {
           summary: r.summary,
           score: r.healthScore,
           instructions: r.analyzedInstructions.steps,
-          diets: r.diets
+          dietTypes: r.diets
         });
-        // console.log('r.diets ',r.diets)      
-      }
-      )
-      await Promise.all(recs)
 
-
-    } else {
-      msg = 'recipes in DB'
-      console.log(cont)
-      food.results.map(async r => {
-
-
-        resp = await Recipe.findOne({
-          where: { name: r.title }
-        })
-        let diets = r.diets
-        // console.log(toId(diets))
-
-        resp.addDiets(toId(diets))
-        return
-        // console.log('diets ',diets)
-        // console.log(r.title,' ',r.diets);
-
-      }
-      )
-      resp = await Recipe.findAll({
-        include: {
-          model: Diets,
-          attributes: ["name"],
-          through: {
-            attributes: [],
-          },
-        },
+        
+        // console.log('r.diets ', r.diets)
       })
+      await Promise.all(recs)      
+      
+      // let dt=[]
+      // for (let i=0; i<dietTypes.length ; i++) {
+        //   dt.push( await Diets.findOne({where:{name:dietTypes[i]}}) )
+        // }
+        
+        
+        console.log('recipes created')
+        let allRecs = await Recipe.findAll()
+        
+
+    console.log(allRecs.length)
+    
+    // allRecs.map(async r=> { 
+    //                       //  console.log ( await Recipe.findOne({where: {name: r.name }}) )  
+    //                        let newRec = await Recipe.findOne({where: {name: r.name }})
+
+    //                                 newRec.dietTypes.map(async d=> {
+    //                                 // console.log(d)
+    //                                 let newD = await Diets.findOne({where: {name:d}}) 
+    //                                  await newRec.addDiet(newD)
+    //                                 // console.log(newD.id)     
+    //                               }
+    //                                 )      
+
+
+    //                        }) 
+        
+        
+        // dt.map( async d=> await newRecipe.addDiet(d.id))
+        
+      }
+    } catch (error) {
+      console.log(error.message)
+    }  
+
+    let allRecs = await Recipe.findAll()
+        
+
+    console.log(allRecs.length)
+    
+    // allRecs.map(async r=> { 
+    //                       //  console.log ( await Recipe.findOne({where: {name: r.name }}) )  
+    //                        let newRec = await Recipe.findOne({where: {name: r.name }})
+
+    //                                 newRec.dietTypes.map(async d=> {
+    //                                 // console.log(d)
+    //                                 let newD = await Diets.findOne({where: {name:d}}) 
+    //                                  await newRec.addDiet(newD)
+    //                                 // console.log(newD.id)     
+    //                               }
+    //                                 )      
+
+
+    //                        }) 
+                           
+
+    // console.log(newRec.dietTypes)
+    // newRec.dietTypes.map(async d=> {
+    //   console.log(d)
+    //   let newD = await Diets.findOne({where: {name:d}}) 
+    //   await newRec.addDiet(newD)
+    //   console.log(newD.id)     
+    // }
+    //   )
+
+    // console.log(dr)
+    // await newRec.addDiet(d.id)
+    
+
+    
+    
+    
+    
+    if (!name) {
+      recsCreated =  await Recipe.findAll()
+      // console.log(recsCreated)
+    } else {
+      recsCreated =  await Recipe.findAll()
+      recsCreated.filter((n) => n.name.toLowerCase().includes(name.toLowerCase()));
+      if (!recsCreated.length)
+      res.json({ message: 'there`s no recipe' })
     }
-
-  } catch (error) {
-    console.log(error.message)
-  }
-
-  res.json(resp)
+    resp = await Recipe.findAll()
+    
+  return res.json(resp)
 }
