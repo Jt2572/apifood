@@ -4,7 +4,7 @@ const { types} = require ('../../utils/dietTypes.js')
 module.exports.getRecipes = async (req,res) => {
 
    
-    // console.log( types)
+    
     try {
            
       let diets= types.map(async (d) => {
