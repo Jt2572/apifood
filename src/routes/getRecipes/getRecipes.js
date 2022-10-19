@@ -42,15 +42,8 @@ module.exports.getRecipes = async (req, res) => {
     console.log(error.message)
   }  
   
-  resp = await Recipe.findAll({include:Diets})
-  if (!name) {
-    recsCreated = resp
-    // console.log(recsCreated)
-  } else {
-    recsCreated = resp.filter((n) => n.name.toLowerCase().includes(name.toLowerCase()));
-    if (!recsCreated.length)
-      return res.json({ message: 'there`s no recipe' })
-  }
+  resp = await Recipe.findAll()
 
-  res.json(recsCreated)
+
+  res.json(resp)
 }
