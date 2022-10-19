@@ -1,49 +1,27 @@
-require("dotenv").config();
-const { YOUR_API_KEY } = process.env;
-const axios = require("axios");
-const food = require('./food.json');
-const { toId } = require('../../utils/toId.js')
-const { Recipe, Diets } = require("../../db");
-const { Op } = require("sequelize");
-const { types } = require('../../utils/dietTypes.js')
+const  { Diets }  = require('../../db');
+const { types} = require ('../../utils/dietTypes.js')
 
-module.exports.getRecipes = async (req, res) => {
-  const { name } = req.query;  
-  var recsCreated = []
-  var resp = []
-  
-  try {
-    let recs = await Recipe.findAll()   
+module.exports.getDietTypes = async (req,res) => {
 
-    if (recs.length === 0) {
-
-      // let diets = types.map(async (d) => {
-      //   await Diets.findOrCreate({
-      //     where: { name: d },
-      //   });
-      // });
-      // await Promise.all(diets)
-
-      recs = food.results.map(r => {
-        Recipe.create({
-          name: r.title,
-          image: r.image,
-          summary: r.summary,
-          score: r.healthScore,
-          instructions: r.analyzedInstructions.steps,
-          dietTypes: r.diets
+   
+    // console.log( types)
+    try {
+           
+      let diets= types.map(async (d) => {
+        await Diets.findOrCreate({
+          where: { name: d },
         });
-        // console.log('r.diets ', r.diets)
-      })
-      await Promise.all(recs)      
-      console.log('recipes created')
-    }
+      });
+      
+        await Promise.all(diets)
+      let response = await Diets.findAll()
+      // console.log(response.map(r=>r))
+      return res.json(response)
+      
   } catch (error) {
-    console.log(error.message)
-  }  
+    console.log(error);
+  }
   
-  resp = await Recipe.findAll()
 
-
-  res.json(resp)
-}
+  
+};
