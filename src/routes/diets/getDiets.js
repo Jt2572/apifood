@@ -6,6 +6,9 @@ module.exports.getDietTypes = async (req,res) => {
    
     // console.log( types)
     try {
+
+      let dietsDB = await Diets.findAll()
+      if (!dietsDB.length) { console.log('no diets')}
            
       let diets= types.map(async (d) => {
         await Diets.findOrCreate({
