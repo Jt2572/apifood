@@ -123,5 +123,5 @@ module.exports.getRecipes = async (req, res) => {
     }
     resp = await Recipe.findAll()
     
-  return res.json(resp)
+  return res.json(allRecs)
 }
