@@ -17,6 +17,9 @@ module.exports.getRecipes = async (req, res) => {
 
     if (recs.length === 0) {
 
+      let diets = await Diets.findAll()
+      console.log(diets)
+
       // let diets = types.map(async (d) => {
       //   await Diets.findOrCreate({
       //     where: { name: d },
@@ -117,11 +120,15 @@ module.exports.getRecipes = async (req, res) => {
       // console.log(recsCreated)
     } else {
       recsCreated =  await Recipe.findAll()
-      recsCreated.filter((n) => n.name.toLowerCase().includes(name.toLowerCase()));
-      if (!recsCreated.length)
-      res.json({ message: 'there`s no recipe' })
+      let filterRec = recsCreated.filter((n) => n.name.toLowerCase().includes(name.toLowerCase()));
+      if (!filterRec.length) {
+
+        res.json({ message: 'there`s no recipe' })
+      }else {
+        recsCreated=filterRec
+      }
     }
-    resp = await Recipe.findAll()
+    // resp = await Recipe.findAll()
     
-  return res.json(allRecs)
+  return res.json(recsCreated)
 }
