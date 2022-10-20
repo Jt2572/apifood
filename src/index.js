@@ -18,7 +18,7 @@
 //                       `=---='
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const server = require('./app.js');
-const { conn } = require('./src/db.js');
+const { conn } = require('./db.js');
 
 // Syncing all the models at once.
 
