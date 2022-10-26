@@ -34,7 +34,7 @@ module.exports.getRecipes = async (req, res) => {
         });
       })
       await Promise.all(recs)
-      console.log('recipes created')
+      // console.log('recipes created')
     }
   } catch (error) {
     console.log(error.message)
