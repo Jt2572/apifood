@@ -9,20 +9,21 @@ module.exports.getRecipes = async (req, res) => {
   const { name } = req.query;
   var recsCreated = []
 
-
+  
+  
   try {
+    
+
+
     let recs = await Recipe.findAll()
 
     if (recs.length === 0) {
-
-      // let diets = types.map(async (d) => {
-      //   await Diets.findOrCreate({
-      //     where: { name: d },
-      //   });
-      // });
-      // await Promise.all(diets)
-
-      recs = food.results.map(r => {
+      
+      const json = await axios.get(        
+        `https://api.spoonacular.com/recipes/complexSearch?apiKey=${YOUR_API_KEY}&addRecipeInformation=true&number=100`
+      );
+        
+      recs = json.data.map(r => {
         Recipe.create({
           name: r.title,
           image: r.image,
@@ -33,7 +34,7 @@ module.exports.getRecipes = async (req, res) => {
         });
       })
       await Promise.all(recs)
-      console.log('recipes created')
+      // console.log('recipes created')
     }
   } catch (error) {
     console.log(error.message)
