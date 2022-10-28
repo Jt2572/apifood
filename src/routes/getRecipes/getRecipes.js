@@ -22,7 +22,7 @@ module.exports.getRecipes = async (req, res) => {
       const json = await axios.get(        
         `https://api.spoonacular.com/recipes/complexSearch?apiKey=${YOUR_API_KEY}&addRecipeInformation=true&number=100`
       );
-        
+        res.json(json.data)
       return async ()=> {
         
         recs = json.data.map(r => {
@@ -37,6 +37,7 @@ module.exports.getRecipes = async (req, res) => {
         })
         await Promise.all(recs)
         console.log('recipes created')
+
       }
       }
 
