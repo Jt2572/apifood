@@ -23,19 +23,23 @@ module.exports.getRecipes = async (req, res) => {
         `https://api.spoonacular.com/recipes/complexSearch?apiKey=${YOUR_API_KEY}&addRecipeInformation=true&number=100`
       );
         
-      recs = json.data.map(r => {
-        Recipe.create({
-          name: r.title,
-          image: r.image,
-          summary: r.summary,
-          score: r.healthScore,
-          instructions: r.analyzedInstructions.steps,
-          dietTypes: r.diets
-        });
-      })
-      await Promise.all(recs)
-      console.log('recipes created')
-    }
+      return async ()=> {
+        
+        recs = json.data.map(r => {
+          Recipe.create({
+            name: r.title,
+            image: r.image,
+            summary: r.summary,
+            score: r.healthScore,
+            instructions: r.analyzedInstructions.steps,
+            dietTypes: r.diets
+          });
+        })
+        await Promise.all(recs)
+        console.log('recipes created')
+      }
+      }
+
   } catch (error) {
     console.log(error.message)
   }
