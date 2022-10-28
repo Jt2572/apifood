@@ -19,23 +19,26 @@ module.exports.getRecipes = async (req, res) => {
 
     if (recs.length === 0) {
       
-      const json = await axios.get(        
+      const resp = await axios.get(        
         `https://api.spoonacular.com/recipes/complexSearch?apiKey=${YOUR_API_KEY}&addRecipeInformation=true&number=100`
       );
-        res.send(json.data)
-      
         
-        recs = json.data.map(r => {
-          Recipe.create({
-            name: r.title,
-            image: r.image,
-            summary: r.summary,
-            score: r.healthScore,
-            instructions: r.analyzedInstructions.steps,
-            dietTypes: r.diets
-          });
-        })
-        await Promise.all(recs)
+      // console.log(resp.data)
+        
+
+          recs = resp.data.results?.map( async r => {
+            await Recipe.create({
+              name: r.title,
+              image: r.image,
+              summary: r.summary,
+              score: r.healthScore,
+              instructions: r.analyzedInstructions.steps,
+              dietTypes: r.diets
+            });
+          })
+          await Promise.all(recs)
+        
+
         console.log('recipes created')
 
             }
