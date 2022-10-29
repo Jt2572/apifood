@@ -20,7 +20,7 @@ module.exports.getRecipes = async (req, res) => {
     if (recs.length === 0) {
       
       const resp = await axios.get(        
-        `https://api.spoonacular.com/recipes/complexSearch?apiKey=${YOUR_API_KEY}&addRecipeInformation=true&number=100`
+        `https://api.spoonacular.com/recipes/complexSearch?apiKey=d46ef4c0ab65401fb01d26ba51f97f4b&addRecipeInformation=true&number=100`
       );
         
       // console.log(resp.data)
