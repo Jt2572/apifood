@@ -12,7 +12,7 @@ const {
 
 
 
-// const sequelize = new Sequelize( 'postgres://fooddb_user:kYHeDV1z0luPbKIrEeDLjGDfpsYzAjA2@dpg-cde79ahgp3juhhtkokag-a/fooddb',
+const sequelize = new Sequelize(
   DATABASE_URL
     ? `${DATABASE_URL}`
     : `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`,
@@ -26,7 +26,7 @@ const {
         }
       : {},
   }
-
+)
 
 
 // const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/food`, {
