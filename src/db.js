@@ -7,26 +7,36 @@ const modelRecipe = require('./models/Recipe.js')
 const modelDiets = require('./models/Diets.js');
 
 const {
-  DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DATABASE_URL, LDB_URL, API_KEY,
+  DB_USER, DB_PASSWORD, DB_HOST, DB_DEPLOY, DB_NAME, DATABASE_URL, LDB_URL, API_KEY,
 } = process.env;
 
 
 
-const sequelize = new Sequelize(
-  DATABASE_URL
-    ? `${DATABASE_URL}`
-    : `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`,
+// const sequelize = new Sequelize(
+//   DATABASE_URL
+//     ? `${DATABASE_URL}`
+//     : `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`,
+//   {
+//     logging: false, // set to console.log to see the raw SQL queries
+//     native: false, // lets Sequelize know we can use pg-native for ~30% more speed
+//     ssl: process.env.PORT ? true : false,
+//     dialectOptions: process.env.PORT
+//       ? {
+//           ssl: { require: true, rejectUnauthorized: false },
+//         }
+//       : {},
+//   }
+// )
+
+
+var sequelize = new Sequelize(
+   DB_DEPLOY,
   {
     logging: false, // set to console.log to see the raw SQL queries
     native: false, // lets Sequelize know we can use pg-native for ~30% more speed
-    ssl: process.env.PORT ? true : false,
-    dialectOptions: process.env.PORT
-      ? {
-          ssl: { require: true, rejectUnauthorized: false },
-        }
-      : {},
+   
   }
-)
+);
 
 
 // const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/food`, {
