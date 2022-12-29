@@ -17,6 +17,7 @@
 //     =====`-.____`.___ \_____/___.-`___.-'=====
 //                       `=---='
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 const server = require('./app.js');
 const { conn } = require('./db.js');
 const port = process.env.PORT || 3001;
@@ -29,7 +30,7 @@ const port = process.env.PORT || 3001;
 // });
 
 conn.sync({ force:false }).then(() => {
-  server.listen(process.env.PORT, () => {
+  server.listen(port, () => {
     console.log(`%s listening at ${port} `); // eslint-disable-line no-console
   });
 });
