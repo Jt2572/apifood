@@ -1,5 +1,5 @@
 const path = require('path')
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
+require('dotenv').config({ path: path.resolve(__dirname, '../../../.env') })
 const { YOUR_API_KEY } = process.env;
 const axios = require("axios");
 const food = require('./food.json');
@@ -10,7 +10,7 @@ module.exports.getRecipes = async (req, res) => {
   const { name } = req.query;
   var recsCreated = []
 
-  
+  // console.log('key ',YOUR_API_KEY)
   
   try {
     
@@ -22,7 +22,7 @@ module.exports.getRecipes = async (req, res) => {
         `https://api.spoonacular.com/recipes/complexSearch?apiKey=${YOUR_API_KEY}&addRecipeInformation=true&number=100`
       );
         
-      // console.log(resp.data)
+      console.log(resp.data)
         
 
           recs = resp.data.results?.map( async r => {
